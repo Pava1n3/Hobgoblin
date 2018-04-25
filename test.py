@@ -1,3 +1,4 @@
+#http://thinkingtkinter.sourceforge.net/
 from Tkinter import *
 
 class MyApp:                         
