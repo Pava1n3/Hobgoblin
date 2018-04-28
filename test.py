@@ -12,9 +12,9 @@ class MyApp:
 		
 	def button1Click(self, event):      
 		self.button1.configure(text="Clicked!")
-		self.button2 = Button(self.myContainer1, text="The Child" + str(event.x))
+		self.button2 = Button(self.myContainer1, text="The Child" + str(event.x), command= lambda : self.button2.destroy())
+		self.button2.bind("<Button-1>", lambda e : self.button2.destroy()) #sketchy af atm
 		self.button2.pack(side=LEFT)
-		#self.button2.bind("<Button-1>", lamba e: self.destroy())
 
 root = Tk()
 myApp = MyApp(root)
