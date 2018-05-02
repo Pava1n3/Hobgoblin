@@ -1,24 +1,32 @@
 #http://thinkingtkinter.sourceforge.net/
-from tkinter import *
+from Tkinter import *
 
-class HobGoblin:                       
-	creatureArray = []
-	creatureCount = 0		
-  
-	def __init__(self, parent):      
+creatureCount = 0
+creatureArray = []
+
+class HobGoblin:					     
+	def __init__(self, parent):		 
 		self.mainContainer = Frame(parent) #Create a container, which stores data but displays nothing
 		self.mainContainer.pack()
 		self.creatureContainer = Frame(parent)
 		
 		self.makeCreatureButton = Button(self.mainContainer, text="Click me!", background="red") #Button stored in mainContainer, a 'widget'
 		self.makeCreatureButton.pack()
-		self.makeCreatureButton.bind("<Button-1>", self.makeCreatureButtonClick)  
+		self.makeCreatureButton.bind("<Button-1>", self.makeCreatureButtonClick)  		
 		
-	def makeCreatureButtonClick(self, event):      
-		#self.makeCreatureButton.configure(text="Clicked!")
-		self.button2 = Button(self.mainContainer, text=str(self.creatureCount) + "The Child" + str(event.x), command= lambda : self.button2.destroy())
-		self.button2.bind("<Button-1>", lambda e : self.button2.destroy()) #sketchy af atm
-		self.button2.pack(side=LEFT)
+	def makeCreatureButtonClick(self, event):	
+		global creatureArray
+		global creatureCount
+	
+		creature = Button(self.mainContainer, text="Child " + str(creatureCount), command= lambda : creature.destroy())
+		creature.id = creatureCount
+		creatureArray.append(creature)
+		
+		creature.bind("<Button-1>", lambda e : creature.destroy()) #sketchy af atm
+		creature.pack(side=LEFT)
+		creatureCount += 1
+				
+		
 
 root = Tk()
 hobGoblin = HobGoblin(root)
