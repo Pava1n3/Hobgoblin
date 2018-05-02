@@ -1,5 +1,6 @@
 #http://thinkingtkinter.sourceforge.net/
 from Tkinter import *
+from PIL import ImageTk, Image
 
 creatureCount = 0
 creatureArray = []
@@ -51,13 +52,17 @@ class Creature:
 		self.bestiaryFile = open(fileName, "r")
 		
 		self.name = self.bestiaryFile.readline()
-		self.portrait = self.bestiaryFile.readline()
+		self.portrait = ImageTk.PhotoImage(Image.open(self.bestiaryFile.readline()))
 		self.hp = self.bestiaryFile.readline()
 		self.ac = self.bestiaryFile.readline()
 		
 	def printSelf(self):
 		print(self.name + self.hp + self.ac)
-	
+		
+	def makeImage(self):
+		#panel = tk.Label(root, image = img)
+		#panel.pack(side = "bottom", fill = "both", expand = "yes")
+		self.image = 5
 
 root = Tk()
 hobGoblin = HobGoblin(root)
