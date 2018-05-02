@@ -1,0 +1,4 @@
+Zombie
+zombie.png
+20
+11
