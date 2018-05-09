@@ -1,6 +1,6 @@
 #http://thinkingtkinter.sourceforge.net/
-from Tkinter import *
-from PIL import ImageTk, Image
+from tkinter import *
+from PIL import Image
 
 creatureCount = 0
 creatureArray = []
@@ -52,7 +52,8 @@ class Creature:
 		self.bestiaryFile = open(fileName, "r")
 		
 		self.name = self.bestiaryFile.readline()
-		self.portrait = ImageTk.PhotoImage(Image.open(self.bestiaryFile.readline()))
+		self.portrait = Image.open(self.bestiaryFile.readline()) #remove newline from reads
+		#self.portrait.show()
 		self.hp = self.bestiaryFile.readline()
 		self.ac = self.bestiaryFile.readline()
 		
