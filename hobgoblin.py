@@ -10,6 +10,7 @@ class HobGoblin:
 		self.mainContainer = Frame(parent) #Create a container, which stores data but displays nothing
 		self.mainContainer.pack()
 		self.creatureContainer = Frame(parent)
+		self.creatureContainer.pack()
 		
 		self.makeCreatureButton = Button(self.mainContainer, text="Click me!", background="red") #Button stored in mainContainer, a 'widget'
 		self.makeCreatureButton.pack()
@@ -28,11 +29,28 @@ class HobGoblin:
 		print creature.id
 		creatureCount += 1"""
 		
-		creature = Creature(self.creatureContainer)
-		creature.readBestiaryFile("zombie.txt")
-		creature.printSelf()
+		creature = Creature(self.creatureContainer, "zombie.txt")
+		
 				
+#Creature main class creature with display, data and methods etc.				
 class Creature:
+	def __init__(self, container, source):
+		self.data = CreatureData()
+		self.display = CreatureDisplay()
+		
+		self.data.readBestiaryFile(source)
+		self.display.createDisplay(container, self.data)
+				
+class CreatureDisplay:
+	def __init__(self):
+		pass
+		
+	def createDisplay(self, container, data):
+		self.label = Label(container, text=data.name)
+		self.label.pack(side=LEFT)
+	
+				
+class CreatureData:
 	#Health
 	#Portrait
 	#Stats : STR DEX CON INT WIS CHA
@@ -43,27 +61,19 @@ class Creature:
 	#Name
 	#READ a file to load preset
 	
-	def __init__(self, parent):
-		#self.mainContainer = Frame(parent)
-		#self.mainContainer.pack()
+	def __init__(self):
 		self.name = "default"
 	
 	def readBestiaryFile(self, fileName):
 		self.bestiaryFile = open(fileName, "r")
 		
-		self.name = self.bestiaryFile.readline()
-		self.portrait = Image.open(self.bestiaryFile.readline()) #remove newline from reads
-		#self.portrait.show()
-		self.hp = self.bestiaryFile.readline()
-		self.ac = self.bestiaryFile.readline()
+		self.name = self.bestiaryFile.readline().rstrip('\n')
+		self.portrait = Image.open(self.bestiaryFile.readline().rstrip('\n')) 
+		self.hp = self.bestiaryFile.readline().rstrip('\n')
+		self.ac = self.bestiaryFile.readline().rstrip('\n')
 		
 	def printSelf(self):
 		print(self.name + self.hp + self.ac)
-		
-	def makeImage(self):
-		#panel = tk.Label(root, image = img)
-		#panel.pack(side = "bottom", fill = "both", expand = "yes")
-		self.image = 5
 
 root = Tk()
 hobGoblin = HobGoblin(root)
