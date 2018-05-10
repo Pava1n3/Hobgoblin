@@ -1,6 +1,6 @@
 #http://thinkingtkinter.sourceforge.net/
 from tkinter import *
-from PIL import Image
+from PIL import Image, ImageTk
 
 creatureCount = 0
 creatureArray = []
@@ -12,7 +12,7 @@ class HobGoblin:
 		self.creatureContainer = Frame(parent)
 		self.creatureContainer.pack()
 		
-		self.makeCreatureButton = Button(self.mainContainer, text="Click me!", background="red") #Button stored in mainContainer, a 'widget'
+		self.makeCreatureButton = Button(self.mainContainer, text="Raise a zombie", background="grey") #Button stored in mainContainer, a 'widget'
 		self.makeCreatureButton.pack()
 		self.makeCreatureButton.bind("<Button-1>", self.makeCreatureButtonClick)  		
 		
@@ -30,6 +30,7 @@ class HobGoblin:
 		creatureCount += 1"""
 		
 		creature = Creature(self.creatureContainer, "zombie.txt")
+		creatureArray.append(creature)
 		
 				
 #Creature main class creature with display, data and methods etc.				
@@ -46,8 +47,15 @@ class CreatureDisplay:
 		pass
 		
 	def createDisplay(self, container, data):
-		self.label = Label(container, text=data.name)
+		labelText = self.createStatBlock(data)
+	
+		self.label = Label(container, compound=TOP, text=labelText, image=data.portrait)
+		self.label.image = data.portrait
 		self.label.pack(side=LEFT)
+		
+	def createStatBlock(self, data):
+		return data.name + "\n HP: " + data.hp+ "\n AC: " + data.ac + "\n STR DEX CON INT WIS CHA"
+	
 	
 				
 class CreatureData:
@@ -62,13 +70,14 @@ class CreatureData:
 	#READ a file to load preset
 	
 	def __init__(self):
+		#Change all strings/ints to StringVars (IntVars???) so they will update
 		self.name = "default"
 	
 	def readBestiaryFile(self, fileName):
 		self.bestiaryFile = open(fileName, "r")
 		
 		self.name = self.bestiaryFile.readline().rstrip('\n')
-		self.portrait = Image.open(self.bestiaryFile.readline().rstrip('\n')) 
+		self.portrait = ImageTk.PhotoImage(Image.open(self.bestiaryFile.readline().rstrip('\n')))
 		self.hp = self.bestiaryFile.readline().rstrip('\n')
 		self.ac = self.bestiaryFile.readline().rstrip('\n')
 		
