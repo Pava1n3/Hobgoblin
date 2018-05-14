@@ -19,17 +19,9 @@ class HobGoblin:
 	def makeCreatureButtonClick(self, event):	
 		global creatureArray
 		global creatureCount
-	
-		"""creature = Button(self.mainContainer, text="Child " + str(creatureCount), command= lambda : creature.destroy())
-		creature.id = creatureCount
-		creatureArray.append(creature)
-		
-		creature.bind("<Button-1>", lambda e : creature.destroy())
-		creature.pack(side=LEFT)
-		print creature.id
-		creatureCount += 1"""
 		
 		creature = Creature(self.creatureContainer, "zombie.txt")
+		creatureCount += 1
 		creatureArray.append(creature)
 		
 				
@@ -41,6 +33,7 @@ class Creature:
 		
 		self.data.readBestiaryFile(source)
 		self.display.createDisplay(container, self.data)
+		self.id = creatureCount
 				
 class CreatureDisplay:
 	def __init__(self):
@@ -56,7 +49,17 @@ class CreatureDisplay:
 	def createStatBlock(self, data):
 		return data.name + "\n HP: " + data.hp+ "\n AC: " + data.ac + "\n STR DEX CON INT WIS CHA"
 	
-	
+class CreatureManager:
+	def __init__(self, parent):
+		self.parent = parent
+		
+	def createDestroyButton(self, container): #potentially borked methods
+		destroyButton = Button(container, text="Destroy " + str(parent.id), command= lambda : self.destroyCreature())
+		destroyButton.bind("<Button-1>", lambda e : self.destroyCreature())
+		destroyButton.pack(side=LEFT)
+		
+	def destroyCreature(self):
+		creatureArray[parent.id].destroy() #parent + all children should be deaded
 				
 class CreatureData:
 	#Health
