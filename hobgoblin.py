@@ -7,8 +7,8 @@ creatureArray = []
 
 class HobGoblin:					     
 	def __init__(self, parent):		 
-		self.mainContainer = Frame(parent, bg="cyan") #this boy does not show up in pages, but he is in the background
-		self.mainContainer.pack(fill="both", expand="true")
+		self.mainContainer = Frame(parent, bg="cyan", width=225) #this boy does not show up in pages, but he is in the background
+		self.mainContainer.grid(row=0, column=0)
 		self.mainContainer.grid_columnconfigure(0, weight=1)
 		self.mainContainer.grid_rowconfigure(0, weight=1)
 		
@@ -26,33 +26,14 @@ class HobGoblin:
 		
 	def switch_page(self, context):
 		page = self.pages[context]
-		page.tkraise()
-		
-		
-	def createMakeCreatureButton(self):
-		self.makeCreatureButton = Button(self.mainContainer, text="Raise a zombie", background="grey") #Button stored in mainContainer, a 'widget'
-		self.makeCreatureButton.pack()
-		self.makeCreatureButton.bind("<Button-1>", self.makeCreatureButtonClick)  		
-		
-	def makeCreatureButtonClick(self, event):	
-		global creatureArray
-		global creatureCount
-		
-		creature = Creature(self.creatureContainer, "zombie.txt")
-		creatureCount += 1
-		creatureArray.append(creature)
-		
+		page.tkraise()		
 
 class MainScreen(Frame):
-	def __init__(self, parent, controller):
-		Frame.__init__(self, parent, bg="pink", width=100, height=500) #init takes a master, which is mainContainer
+	def __init__(self, parent, controller): #parent = mainContainer, controller = HobGoblin
+		Frame.__init__(self, parent, bg="pink") 
 		
-		label = Label(self, text="Main Page")
-		label.grid(row=1, column=1)
-		"""self.grid_rowconfigure(0, weight=1)
-		self.grid_rowconfigure(2, weight=1)
-		self.grid_columnconfigure(0, weight=1)
-		self.grid_columnconfigure(2, weight=1)"""
+		toCreatureManagerScreenButtonManager = ToCreatureManagerScreenButtonManager(self, controller)
+		toCreatureManagerScreenButtonManager.MakeAndDisplayButton()
 
 class CreatureManagerScreen(Frame):
 	def __init__(self, parent, controller):
@@ -67,6 +48,44 @@ class CreatureTrackerScreen(Frame):
 		
 		label = Label(self, text="Tracker Page")
 		label.pack(padx=10, pady=10)		
+		
+class ToCreatureManagerScreenButtonManager():
+	def __init__(self, container, controller):
+		self.container = container
+		self.controller = controller
+	
+	def MakeAndDisplayButton(self):
+		self.inputHandler = ToCreatureManagerScreenButtonHandler(self.controller)
+		self.button = ToCreatureManagerScreenButton(self.container, self.inputHandler)
+		#self.button.grid(row=1, column=1)
+		
+class ToCreatureManagerScreenButton(Button):
+	def __init__(self, container, inputHandler):
+		Button.__init__(container, text="Creature Manager")#, command=lambda: inputHandler.HandleInput())
+		#self.bind("<Button-1>", lambda e : inputHandler.HandleInput())
+		
+class ToCreatureManagerScreenButtonHandler():
+	def __init__(self, controller):
+		self.controller = controller
+		
+	def HandleInput(self):
+		self.controller.switch_page(CreatureManagerScreen)
+
+		
+########################################## CREATURE CODE ###################################################		
+class MakeCreatureButton:
+	def createMakeCreatureButton(self):
+		self.makeCreatureButton = Button(self.mainContainer, text="Raise a zombie", background="grey") #Button stored in mainContainer, a 'widget'
+		self.makeCreatureButton.pack()
+		self.makeCreatureButton.bind("<Button-1>", self.makeCreatureButtonClick)  		
+		
+	def makeCreatureButtonClick(self, event):	
+		global creatureArray
+		global creatureCount
+		
+		creature = Creature(self.creatureContainer, "zombie.txt")
+		creatureCount += 1
+		creatureArray.append(creature)
 		
 #Creature main class creature with display, data and methods etc.				
 class Creature:
