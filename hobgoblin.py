@@ -7,11 +7,29 @@ creatureArray = []
 
 class HobGoblin:					     
 	def __init__(self, parent):		 
-		self.mainContainer = Frame(parent) #Create a container, which stores data but displays nothing
-		self.mainContainer.pack()
-		self.creatureContainer = Frame(parent)
-		self.creatureContainer.pack()
+		self.mainContainer = Frame(parent, bg="cyan") #this boy does not show up in pages, but he is in the background
+		self.mainContainer.pack(fill="both", expand="true")
+		self.mainContainer.grid_columnconfigure(0, weight=1)
+		self.mainContainer.grid_rowconfigure(0, weight=1)
 		
+		self.setupPages()
+		
+	def setupPages(self):
+		self.pages = {}
+		
+		for P in (MainScreen, CreatureManagerScreen, CreatureTrackerScreen):
+			page = P(self.mainContainer, self)
+			self.pages[P] = page
+			page.grid(row=0, column=0, sticky="nsew")
+		
+		self.switch_page(MainScreen)	
+		
+	def switch_page(self, context):
+		page = self.pages[context]
+		page.tkraise()
+		
+		
+	def createMakeCreatureButton(self):
 		self.makeCreatureButton = Button(self.mainContainer, text="Raise a zombie", background="grey") #Button stored in mainContainer, a 'widget'
 		self.makeCreatureButton.pack()
 		self.makeCreatureButton.bind("<Button-1>", self.makeCreatureButtonClick)  		
@@ -24,7 +42,32 @@ class HobGoblin:
 		creatureCount += 1
 		creatureArray.append(creature)
 		
-				
+
+class MainScreen(Frame):
+	def __init__(self, parent, controller):
+		Frame.__init__(self, parent, bg="pink", width=100, height=500) #init takes a master, which is mainContainer
+		
+		label = Label(self, text="Main Page")
+		label.grid(row=1, column=1)
+		"""self.grid_rowconfigure(0, weight=1)
+		self.grid_rowconfigure(2, weight=1)
+		self.grid_columnconfigure(0, weight=1)
+		self.grid_columnconfigure(2, weight=1)"""
+
+class CreatureManagerScreen(Frame):
+	def __init__(self, parent, controller):
+		Frame.__init__(self, parent) #init takes a master, which is parent which is HobGoblin
+		
+		label = Label(self, text="Creature Page")
+		label.pack(padx=10, pady=10)
+
+class CreatureTrackerScreen(Frame):
+	def __init__(self, parent, controller):
+		Frame.__init__(self, parent) #init takes a master, which is parent which is HobGoblin
+		
+		label = Label(self, text="Tracker Page")
+		label.pack(padx=10, pady=10)		
+		
 #Creature main class creature with display, data and methods etc.				
 class Creature:
 	def __init__(self, container, source):
@@ -34,6 +77,9 @@ class Creature:
 		self.data.readBestiaryFile(source)
 		self.display.createDisplay(container, self.data)
 		self.id = creatureCount
+		
+		#self.creatureContainer = Frame(parent)
+		#self.creatureContainer.pack()
 				
 class CreatureDisplay:
 	def __init__(self):
@@ -89,5 +135,6 @@ class CreatureData:
 
 root = Tk()
 hobGoblin = HobGoblin(root)
+root.geometry("250x150+250+250")
 root.wm_attributes("-topmost", 1) 
 root.mainloop()
