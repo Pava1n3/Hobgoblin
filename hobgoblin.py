@@ -1,13 +1,16 @@
 #http://thinkingtkinter.sourceforge.net/
 from tkinter import *
 from PIL import Image, ImageTk
+from mainmenu.mainmenubuttons import *
+from creaturemanager.creaturemanagerscreen import *
 
 creatureCount = 0
 creatureArray = []
 
+#window is 250X150 
 class HobGoblin:					     
 	def __init__(self, parent):		 
-		self.mainContainer = Frame(parent, bg="cyan", width=225) #this boy does not show up in pages, but he is in the background
+		self.mainContainer = Frame(parent, bg="cyan", width=225, height=125) #this boy does not show up in pages, but he is in the background
 		self.mainContainer.grid(row=0, column=0)
 		self.mainContainer.grid_columnconfigure(0, weight=1)
 		self.mainContainer.grid_rowconfigure(0, weight=1)
@@ -19,10 +22,10 @@ class HobGoblin:
 		
 		for P in (MainScreen, CreatureManagerScreen, CreatureTrackerScreen):
 			page = P(self.mainContainer, self)
-			self.pages[P] = page
+			self.pages[page.__class__.__name__] = page
 			page.grid(row=0, column=0, sticky="nsew")
 		
-		self.switch_page(MainScreen)	
+		self.switch_page("MainScreen")	
 		
 	def switch_page(self, context):
 		page = self.pages[context]
@@ -35,43 +38,13 @@ class MainScreen(Frame):
 		toCreatureManagerScreenButtonManager = ToCreatureManagerScreenButtonManager(self, controller)
 		toCreatureManagerScreenButtonManager.MakeAndDisplayButton()
 
-class CreatureManagerScreen(Frame):
-	def __init__(self, parent, controller):
-		Frame.__init__(self, parent) #init takes a master, which is parent which is HobGoblin
-		
-		label = Label(self, text="Creature Page")
-		label.pack(padx=10, pady=10)
-
 class CreatureTrackerScreen(Frame):
 	def __init__(self, parent, controller):
 		Frame.__init__(self, parent) #init takes a master, which is parent which is HobGoblin
 		
 		label = Label(self, text="Tracker Page")
 		label.pack(padx=10, pady=10)		
-		
-class ToCreatureManagerScreenButtonManager():
-	def __init__(self, container, controller):
-		self.container = container
-		self.controller = controller
-	
-	def MakeAndDisplayButton(self):
-		self.inputHandler = ToCreatureManagerScreenButtonHandler(self.controller)
-		self.button = ToCreatureManagerScreenButton(self.container, self.inputHandler)
-		#self.button.grid(row=1, column=1)
-		
-class ToCreatureManagerScreenButton(Button):
-	def __init__(self, container, inputHandler):
-		Button.__init__(container, text="Creature Manager")#, command=lambda: inputHandler.HandleInput())
-		#self.bind("<Button-1>", lambda e : inputHandler.HandleInput())
-		
-class ToCreatureManagerScreenButtonHandler():
-	def __init__(self, controller):
-		self.controller = controller
-		
-	def HandleInput(self):
-		self.controller.switch_page(CreatureManagerScreen)
-
-		
+				
 ########################################## CREATURE CODE ###################################################		
 class MakeCreatureButton:
 	def createMakeCreatureButton(self):
