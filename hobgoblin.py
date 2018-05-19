@@ -3,15 +3,20 @@ from tkinter import *
 from PIL import Image, ImageTk
 from mainmenu.mainmenubuttons import *
 from creaturemanager.creaturemanagerscreen import *
+from geometrymanager.addtogrid import *
 
 creatureCount = 0
 creatureArray = []
 
 #window is 250X150 
+#On gridconfigures: a widget will have the parts that belong to its parent scale according to the parent's setting. Parts contained in the widget look at the widget's setting combined with their own.
+#The maincontainer background scales because root is set to scale 
+#The pages scale because maincontainer is set to scale
+#in pages things scale because the page is set to
 class HobGoblin:					     
 	def __init__(self, parent):		 
 		self.mainContainer = Frame(parent, bg="cyan", width=225, height=125) #this boy does not show up in pages, but he is in the background
-		self.mainContainer.grid(row=0, column=0)
+		self.mainContainer.grid(row=0, column=0, sticky=N+S+E+W)
 		self.mainContainer.grid_columnconfigure(0, weight=1)
 		self.mainContainer.grid_rowconfigure(0, weight=1)
 		
@@ -22,15 +27,19 @@ class HobGoblin:
 		
 		for P in (MainScreen, CreatureManagerScreen, CreatureTrackerScreen):
 			page = P(self.mainContainer, self)
-			self.pages[page.__class__.__name__] = page
-			page.grid(row=0, column=0, sticky="nsew")
+			self.pages[P] = page #page.__class__.__name__
+			page.grid(row=0, column=0, sticky="nsew", columnspan=5)
+			page.grid_columnconfigure(0, weight=1)
+			page.grid_rowconfigure(0, weight=1)
+			page.grid_columnconfigure(1, weight=1)
+			page.grid_rowconfigure(1, weight=1)
 		
-		self.switch_page("MainScreen")	
+		self.switch_page(MainScreen)	
 		
 	def switch_page(self, context):
 		page = self.pages[context]
 		page.tkraise()		
-
+		
 class MainScreen(Frame):
 	def __init__(self, parent, controller): #parent = mainContainer, controller = HobGoblin
 		Frame.__init__(self, parent, bg="pink") 
@@ -126,7 +135,9 @@ class CreatureData:
 		print(self.name + self.hp + self.ac)
 
 root = Tk()
+root.columnconfigure(0, weight=1)
+root.rowconfigure(0, weight=1)
 hobGoblin = HobGoblin(root)
-root.geometry("250x150+250+250")
+#root.geometry("250x150+250+250")
 root.wm_attributes("-topmost", 1) 
 root.mainloop()
