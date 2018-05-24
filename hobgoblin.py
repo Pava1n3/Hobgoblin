@@ -3,7 +3,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 from mainmenu.mainmenubuttons import *
 from creaturemanager.creaturemanagerscreen import *
-from geometrymanager.addtogrid import *
+from geometrymanager.addtogrid import AddToGrid as hGrid
 
 creatureCount = 0
 creatureArray = []
@@ -16,9 +16,12 @@ creatureArray = []
 class HobGoblin:					     
 	def __init__(self, parent):		 
 		self.mainContainer = Frame(parent, bg="cyan", width=225, height=125) #this boy does not show up in pages, but he is in the background
-		self.mainContainer.grid(row=0, column=0, sticky=N+S+E+W)
-		self.mainContainer.grid_columnconfigure(0, weight=1)
-		self.mainContainer.grid_rowconfigure(0, weight=1)
+		#self.mainContainer.grid(row=0, column=0, sticky=N+S+E+W)
+		self.mainContainer.columnconfigure(0, weight=1)
+		self.mainContainer.rowconfigure(0, weight=1)
+		self.mainContainer.rowconfigure(1, weight=1)
+		hGrid.grid(self.mainContainer)
+		self.root = parent
 		
 		self.setupPages()
 		
@@ -30,22 +33,34 @@ class HobGoblin:
 			self.pages[P] = page #page.__class__.__name__
 			page.grid(row=0, column=0, sticky="nsew", columnspan=5)
 			page.grid_columnconfigure(0, weight=1)
-			page.grid_rowconfigure(0, weight=1)
-			page.grid_columnconfigure(1, weight=1)
+			page.grid_rowconfigure(0, weight=0)
 			page.grid_rowconfigure(1, weight=1)
 		
 		self.switch_page(MainScreen)	
 		
 	def switch_page(self, context):
 		page = self.pages[context]
-		page.tkraise()		
+		page.handlePageSwitch(self.root)
+		page.tkraise()	
+
+	def getRoot(self):
+		return self.root
 		
 class MainScreen(Frame):
-	def __init__(self, parent, controller): #parent = mainContainer, controller = HobGoblin
-		Frame.__init__(self, parent, bg="pink") 
+	def __init__(self, container, controller): #container = mainContainer, controller = HobGoblin
+		Frame.__init__(self, container, bg="pink") 
+		
+		root = controller.getRoot()
+		self.mainScreenMenuBar = Menu(root)
+		self.mainScreenMenuBar.add_command(label="Quit")
+		root.config(menu=self.mainScreenMenuBar)
 		
 		toCreatureManagerScreenButtonManager = ToCreatureManagerScreenButtonManager(self, controller)
 		toCreatureManagerScreenButtonManager.MakeAndDisplayButton()
+		
+	def handlePageSwitch(self, root):
+		root.config(menu=self.mainScreenMenuBar)
+		
 
 class CreatureTrackerScreen(Frame):
 	def __init__(self, parent, controller):
@@ -137,7 +152,8 @@ class CreatureData:
 root = Tk()
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
+root.rowconfigure(1, weight=1)
 hobGoblin = HobGoblin(root)
-#root.geometry("250x150+250+250")
+root.geometry("250x150+250+250")
 root.wm_attributes("-topmost", 1) 
 root.mainloop()

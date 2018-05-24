@@ -14,7 +14,7 @@ class ToCreatureManagerScreenButtonManager():
 	def MakeAndDisplayButton(self):
 		self.inputHandler = ToCreatureManagerScreenButtonInputHandler(self.controller)
 		self.button = ToCreatureManagerScreenButton(self.container, self.inputHandler)
-		self.button.grid(row=1, column=1, sticky=N+S+E+W)
+		self.button.grid(row=0, column=1, sticky=N+S+E+W)
 
 class ToCreatureManagerScreenButtonInputHandler():
 	def __init__(self, controller):

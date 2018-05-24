@@ -4,11 +4,11 @@ class AddToGrid:
 	def __init__(self):
 		pass
 		
-	def grid(self, objectg, gRow=0, gColumn=0, gSticky="nsew", gColumnspan=1, doConfig=false, gWeight=1):
-		object.grid(row=gRow, column=gColumn, sticky=gSticky, columnspan=gColumnspan)
+	def grid(objectg, gRow=0, gColumn=0, gSticky="nsew", gColumnspan=1, doConfig="false", gWeight=1):
+		objectg.grid(row=gRow, column=gColumn, sticky=gSticky, columnspan=gColumnspan)
 		if(doConfig):
-			object.grid_columnconfigure(gColumn, gWeight)
-			object.grid_rowconfigure(gRow, gWeight)
+			objectg.grid_columnconfigure(gColumn, weight=gWeight)
+			objectg.grid_rowconfigure(gRow, weight=gWeight)
 	
 	def ConfigureColumns(self, container, nrOfColumns=10, cWeight=1):
 		for col in range(nrOfColumns):
@@ -21,3 +21,5 @@ class AddToGrid:
 	def ConfigureRowsAndColumns(self, container, nrOfColumnsAndRows=10, rcWeight=1):
 		self.ConfigureColumns(container, nrOfColumnsAndRows, rcWeight)
 		self.ConfigureRows(container, nrOfColumnsAndRows, rcWeight)
+		
+	
