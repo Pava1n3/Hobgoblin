@@ -34,3 +34,4 @@ class CreatureManagerScreen(Frame):
 		
 	def handlePageSwitch(self, root):
 		root.config(menu=self.creatureManagerMenuBar)
+

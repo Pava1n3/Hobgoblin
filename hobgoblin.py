@@ -36,7 +36,7 @@ class HobGoblin:
 			page.grid_rowconfigure(0, weight=0)
 			page.grid_rowconfigure(1, weight=1)
 		
-		self.switch_page(MainScreen)	
+		self.switch_page("MainScreen")	
 		
 	def switch_page(self, context):
 		page = self.pages[context]
