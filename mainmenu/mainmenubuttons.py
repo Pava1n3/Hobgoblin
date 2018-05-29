@@ -1,11 +1,6 @@
 from tkinter import *
 from creaturemanager.creaturemanagerscreen import *
 
-class ToCreatureManagerScreenButton(Button):
-	def __init__(self, container, inputHandler):
-		Button.__init__(self, container, text="Creature Manager", command=lambda: inputHandler.HandleInput())
-		self.bind("<Button-1>", lambda e : inputHandler.HandleInput())
-		
 class ToCreatureManagerScreenButtonManager():
 	def __init__(self, container, controller):
 		self.container = container
@@ -15,6 +10,11 @@ class ToCreatureManagerScreenButtonManager():
 		self.inputHandler = ToCreatureManagerScreenButtonInputHandler(self.controller)
 		self.button = ToCreatureManagerScreenButton(self.container, self.inputHandler)
 		self.button.grid(row=0, column=1, sticky=N+S+E+W)
+
+class ToCreatureManagerScreenButton(Button):
+	def __init__(self, container, inputHandler):
+		Button.__init__(self, container, text="Creature Manager", command=lambda: inputHandler.HandleInput())
+		self.bind("<Button-1>", lambda e : inputHandler.HandleInput())
 
 class ToCreatureManagerScreenButtonInputHandler():
 	def __init__(self, controller):

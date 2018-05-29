@@ -1,5 +1,8 @@
 from tkinter import *
 from geometrymanager.addtogrid import AddToGrid as hGrid
+from creaturemanager.creaturemanagerwidgets import *
+from creaturemanager.creaturemanagerwidgetsbase import *
+from creaturemanager.creaturedata import CreatureData
 
 class CreatureManagerScreen(Frame):
 	def __init__(self, container, controller):
@@ -7,6 +10,7 @@ class CreatureManagerScreen(Frame):
 		
 		root = controller.getRoot()
 		self.createMenuBar(root)
+		self.creatureData = CreatureData()
 		self.createCreatureManagerWidgets()
 		self.gridCreatureManagerWidgets()
 		
@@ -25,11 +29,8 @@ class CreatureManagerScreen(Frame):
 		self.creatureManagerMenuBar.add_command(label="Main Menu")
 		
 	def createCreatureManagerWidgets(self):
-		self.nameLabel = Label(self, text="Creature's name")
-		self.nameEntry = Entry(self)
-						
-		self.crLabel = Label(self, text="Challenge Rating")
-		self.crEntry = Entry(self)
+		self.nameWidget =  SingleFieldWidget(self, "Name", "name", "all", entryWidth=10)
+		self.challengeRatingWidget =  SingleFieldWidget(self, "Challenge Rating", "cr", "numerical", entryWidth=2)
 	
 		self.alignmentLabel = Label(self, text="Alignment")
 		self.alignmentEntry = Entry(self)
@@ -55,10 +56,8 @@ class CreatureManagerScreen(Frame):
 		self.weakAndResistBar = Label(self, text="Weaknesses & Resistances, buttons for res/vuln/imm/abs", anchor="w")
 		self.weakAndResistEntry = Label(self, text="Type in bar, autocomplete to dmg types")
 		
-		self.hpLabel = Label(self, text="Hit Points")
-		self.hpEntry = Entry(self, width=4)
-		self.acLabel = Label(self, text="Armor Class")
-		self.acEntry = Entry(self, width=4)
+		self.hitPointWidget = SingleFieldWidget(self, "Hit Points", "hp", "numerical", entryWidth=4)
+		self.armorClassWidget = SingleFieldWidget(self, "Armor Class", "ac", "numerical", entryWidth=4)
 		
 		self.movementTitleBar = Label(self, text="Movement", anchor="w")
 		self.movementAddMovementButton = Button(self, text="Add Movement Type")
@@ -93,14 +92,14 @@ class CreatureManagerScreen(Frame):
 		#Add from option (dropdown?)
 		#	Movement
 		#	Senses
+		#	Alignment
 		
 		#TBD
 		#	Actions
 		#	Passives
 		
 	def gridCreatureManagerWidgets(self):
-		hGrid.padGrid(self.nameLabel, 1, 1)
-		hGrid.padGrid(self.nameEntry, 1, 2)
+		self.nameWidget.displayWidget(1, 1, 2)
 		
 		hGrid.padGrid(self.typeTagsLabel, 2, 1)
 		hGrid.padGrid(self.typeTagsEntry, 2, 2)
@@ -110,8 +109,7 @@ class CreatureManagerScreen(Frame):
 
 		hGrid.padGrid(self.languageLabel, 3, 1)
 		
-		hGrid.padGrid(self.crLabel, 4, 1)
-		hGrid.padGrid(self.crEntry, 4, 2)
+		self.challengeRatingWidget.displayWidget(4, 1, 2)
 		
 		hGrid.padGrid(self.sensesLabel, 5, 1)
 		hGrid.padGrid(self.sensesEntry, 5, 2)
@@ -120,10 +118,8 @@ class CreatureManagerScreen(Frame):
 	
 		hGrid.doGrid(self.statisticsSeparator, 6, 1, "nsew", 6)
 	
-		hGrid.padGrid(self.hpLabel, 7, 1)
-		hGrid.padGrid(self.hpEntry, 7, 2)
-		hGrid.padGrid(self.acLabel, 7, 4)
-		hGrid.padGrid(self.acEntry, 7, 5)
+		self.hitPointWidget.displayWidget(7, 1, 2)
+		self.armorClassWidget.displayWidget(7, 4, 5)
 		
 		hGrid.padGrid(self.movementTitleBar, 8, 1, 3, 3, "nsew", 6) #clmnspn 5
 		hGrid.padGrid(self.movementAddMovementButton, 8, 6)
